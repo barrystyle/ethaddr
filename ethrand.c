@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stddef.h>
 #include <stdint.h>
@@ -42,13 +43,25 @@ void rand_pair(char *priv, char *pub)
     pubkey_wif(privbytes, priv, pub);
 }
 
+bool is_hex(char *pub)
+{
+    for (int i=0; i<40; i++) {
+        if (pub[i] == 'a' || pub[i] == 'b' || pub[i] == 'c' || \
+            pub[i] == 'd' || pub[i] == 'e' || pub[i] == 'f') {
+            return true;
+        }
+    }
+    return false;
+}
+
 int main()
 {
     char priv[64], pub[40];
 
     while (1) {
         rand_pair(priv, pub);
-        printf("%s %s\n", priv, pub);
+        if (!is_hex(pub))
+            printf("%s %s\n", priv, pub);
     }
 
     return 1;
