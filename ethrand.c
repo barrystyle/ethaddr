@@ -43,25 +43,31 @@ void rand_pair(char *priv, char *pub)
     pubkey_wif(privbytes, priv, pub);
 }
 
-bool is_hex(char *pub)
+int is_hex(char *pub)
 {
+    int count = 0;
     for (int i=0; i<40; i++) {
         if (pub[i] == 'a' || pub[i] == 'b' || pub[i] == 'c' || \
             pub[i] == 'd' || pub[i] == 'e' || pub[i] == 'f') {
-            return true;
+            ++count;
         }
     }
-    return false;
+    return count;
 }
 
 int main()
 {
+    int best = 40;
     char priv[64], pub[40];
 
     while (1) {
         rand_pair(priv, pub);
-        if (!is_hex(pub))
-            printf("%s %s\n", priv, pub);
+        int attempt = is_hex(pub);
+        if (attempt < best) {
+            printf("%s %s (only %d hex)\n", priv, pub, attempt);
+            best = attempt;
+            if (best == 0) break;
+        }
     }
 
     return 1;
