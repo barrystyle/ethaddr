@@ -47,9 +47,10 @@ int is_hex(char *pub)
 {
     int count = 0;
     for (int i=0; i<40; i++) {
-        if (pub[i] == 'a' || pub[i] == 'b' || pub[i] == 'c' || \
-            pub[i] == 'd' || pub[i] == 'e' || pub[i] == 'f') {
+        if (pub[i] == '0') {
             ++count;
+        } else {
+            return count;
         }
     }
     return count;
@@ -57,16 +58,15 @@ int is_hex(char *pub)
 
 int main()
 {
-    int best = 40;
+    int best = 0;
     char priv[64], pub[40];
 
     while (1) {
         rand_pair(priv, pub);
         int attempt = is_hex(pub);
-        if (attempt < best) {
-            printf("%s %s (only %d hex)\n", priv, pub, attempt);
+        if (attempt > best) {
+            printf("%s %s (%d leading zeroes)\n", priv, pub, attempt);
             best = attempt;
-            if (best == 0) break;
         }
     }
 
